@@ -72,6 +72,38 @@ export class GestionList<T extends APIObject> {
 
         table.appendChild(head);
         table.appendChild(body);
+
+        const addButton = document.createElement("button");
+        addButton.innerText = "Add";
+        addButton.onclick = () => {
+            const addFormInputs: Array<Input> = [];
+            for(const category of Object.keys(this.elements[0])) {
+                if(category !== "id"){
+                    if(category === "email") {
+                    addFormInputs.push({
+                        name: category,
+                        input: new EmailInput(true, category)
+                    });
+                } else {
+                    addFormInputs.push({
+                        name: category,
+                        input: new NameInput(category, true)
+                    });
+                }}
+            }
+
+            const addForm = new Form(addFormInputs, "Add");
+            addForm.setSendFunction(() => {
+                const values = addForm.export();
+                console.log(values)
+                API.add(this.route, values.body);
+            })
+
+            const addPopup = new Popup(addForm.getForm(), "Add");
+            addPopup.generate();
+        }
+
+        this.html.appendChild(addButton);
         this.html.appendChild(table); 
     }
 
@@ -100,7 +132,8 @@ export class GestionList<T extends APIObject> {
         editImage.onclick = () => {
             const editFormInputs: Array<Input> = [];
             for(const category of Object.keys(element)) {
-                if(category === "email") {
+                if(category !== "id"){
+                    if(category === "email") {
                     editFormInputs.push({
                         name: category,
                         input: new EmailInput(true, category, element[category].value)
@@ -110,7 +143,7 @@ export class GestionList<T extends APIObject> {
                         name: category,
                         input: new NameInput(category, true, element[category].value)
                     });
-                }
+                }}
             }
 
             const editForm = new Form(editFormInputs, "Edit");
