@@ -4,13 +4,15 @@ export class Layout {
     layout: HTMLDivElement;
     content: HTMLElement | string;
     container: HTMLElement;
+    script: Function;
 
-    constructor(title: string, path: Array<string>, content: HTMLElement | string, container: HTMLElement) {
+    constructor(title: string, path: Array<string>, content: HTMLElement | string, container: HTMLElement, load?:Function) {
         this.title = title;
         this.path = path;
         this.layout = document.createElement("div");
         this.content = content;
         this.container = container;
+        this.script = load ? load : () => {};
     }
 
     generate() {
@@ -38,6 +40,7 @@ export class Layout {
         const content = document.createElement("div");
         content.classList.add("stb-layout-content");
         if(typeof this.content === "string") {
+            console.log(this.content)
             content.innerHTML = this.content;
         } else {
             content.appendChild(this.content);
@@ -52,6 +55,8 @@ export class Layout {
 
     show() {
         this.container.innerHTML = "";
+        console.log(this.script);
         this.container.appendChild(this.layout);
+        this.script();
     }
 }

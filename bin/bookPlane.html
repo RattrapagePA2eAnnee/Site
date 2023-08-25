@@ -2,27 +2,36 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Book plane</title>
+        <title>Atterissage</title>
     </head>
     <body>
-        <script type="module" src="global/bookPlane.js"></script>
         <form>
-            <div style="display: flex">
-                <input type="date" name="startDate" id="startDate">
-                <input type="time" name="startTime" id="startHour">
-            </div>
-            <div style="display: flex">
-                <input type="date" name="endDate" id="endDate">
-                <input type="time" name="endTime" id="endHour">
-            </div>
-            <select id="selectPlane" hidden>
-
+            <input type="date" id="date">
+            <select id="planeType">
+                <option>ULM</option>
+                <option>Helicoptère</option>
+                <option>Avion Mono-Turbine/Bi-Turbine</option>
+                <option>Avion Réacteur Mono/Multi</option>
             </select>
-            <input type="checkbox" name="withInstructor" id="withInstructor" hidden>
-            <select id="selectInstructor" hidden>
-
+            <select type="noiseGroup">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5a</option>
+                <option>5b</option>
             </select>
-            <button type="button" id="bookPlane">Book</button>
+            <input type="checkbox" id="based">
+            <select id="balise">
+                <option>30 min</option>
+                <option>60 min</option>
+                <option>90 min</option>
+                <option>120 min</option>
+                <option>150 min</option>
+                <option>180 min</option>
+                <option>210 min</option>
+            </select>
+            <button id="Land">Order</button>
         </form>
     </body>
 </html>

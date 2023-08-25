@@ -258,4 +258,25 @@ static getPlanes(): Promise<Array<Plane>> {
             planeDispoRequest.send(JSON.stringify(body));
         });
 }
+
+    static createPlaneReservation(body: Object) {
+        const planeReservationRequest = new XMLHttpRequest();
+        return new Promise(resolve => {
+            planeReservationRequest.open("POST", `${API.address}/planereservations`);
+            planeReservationRequest.onreadystatechange = () => {
+                if(planeReservationRequest.readyState === 4) {
+                    if(planeReservationRequest.status === 200) {
+                        const planeReservations = JSON.parse(planeReservationRequest.responseText);
+                        if(planeReservations.success == true){
+                                resolve(true);
+                        } else {
+                            resolve(false);
+                        }
+                    }
+                }
+            }
+            planeReservationRequest.setRequestHeader("Content-type", "application/json");
+            planeReservationRequest.send(JSON.stringify(body));
+        })
+    }
 }
