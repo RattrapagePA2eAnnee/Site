@@ -8,14 +8,16 @@ type PrestationPreparation = {
 export const prestations = () => {
     API.addReservation(JSON.stringify({
         total_price: 0,
-        user_id: API.getCookie("id")
+        user_id: API.getCookie("user_id")
     })).then(reservation_id => {
         const prestations: Array<PrestationPreparation> = [];
         const payButton = <HTMLButtonElement> document.getElementById("pay");
     
         payButton.onclick = () => {
+            for(const prestation of prestations) {
+                API.add(prestation.route, JSON.stringify(prestation.body));
+              }
             document.cookie = `prixTotal=${getTotal()};path=/`;
-            document.cookie = `prestations=${JSON.stringify(prestations)};path=/`;
             const iframe = document.createElement("iframe");
             iframe.src = "/pay.html";
             iframe.style.width = "100%";

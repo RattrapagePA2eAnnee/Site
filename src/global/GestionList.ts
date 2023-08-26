@@ -34,7 +34,7 @@ export class GestionList<T extends APIObject> {
             for(const category of Object.keys(this.elements[0])){
                 if(!this.elements[0][category].detail) {
                     const th = document.createElement("th");
-                    th.innerText = category;
+                    th.innerText = category.replace(/_/g, ' ');
                     head.appendChild(th);
                 }
             }
@@ -55,8 +55,13 @@ export class GestionList<T extends APIObject> {
             this.html.appendChild(table); 
             return;
         }
+            let bgGray = false;
             for(const element of showedElements) {
                 const tr = document.createElement("tr");
+                if(bgGray) {
+                    tr.style.background = "#D9D0CE";
+                }
+                bgGray = !bgGray;
                 for(const category of Object.keys(element)) {
                     if(!element[category].detail){
                         const td = document.createElement("td");
@@ -74,7 +79,11 @@ export class GestionList<T extends APIObject> {
         table.appendChild(body);
 
         const addButton = document.createElement("button");
-        addButton.innerText = "Add";
+        const plusImg = document.createElement("img");
+        plusImg.src = "/global/img/plus.svg";
+        addButton.appendChild(plusImg);
+        addButton.innerHTML = addButton.innerHTML + "  Add";
+        addButton.id = "addButton";
         addButton.onclick = () => {
             const addFormInputs: Array<Input> = [];
             for(const category of Object.keys(this.elements[0])) {
@@ -149,9 +158,6 @@ export class GestionList<T extends APIObject> {
             const editForm = new Form(editFormInputs, "Edit");
             editForm.setSendFunction(() => {
                 const values = editForm.export();
-                console.log(element);
-                console.log(element.id);
-                console.log(element.id.value);
                 API.edit(this.route, element.id.value ,values.body);
             })
 

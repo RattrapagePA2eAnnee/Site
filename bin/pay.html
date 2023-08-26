@@ -59,24 +59,17 @@
           // Envoyer le paiement au serveur via une requête AJAX
           var token = result.paymentMethod.id;
           var amount = prixTotal * 100;
-          const prestationsR = API.getCookie("prestations");
-          const prestations = JSON.parse(prestationsR);
           var xhr = new XMLHttpRequest();
           xhr.open('POST', 'https://api.aen.best/stripeapi', true);
           xhr.setRequestHeader('Content-Type', 'application/json');
           xhr.onload = function() {
-
-            const calls = async () => {
-              for(const prestation of prestations) {
-                await API.add(prestation.route, JSON.stringify(prestation.body));
-              }
+            if (xhr.status === 200) {
+              console.log('Paiement effectué avec succès !');
+              calls().then(() => {
               if (top.location!= self.location) {
                 top.location = "http://aen.local/test.html";
               }
-            }
-            if (xhr.status === 200) {
-              console.log('Paiement effectué avec succès !');
-              calls();
+              });
             } else {
               // Gérer les erreurs de traitement du paiement
               console.error('Erreur lors du traitement du paiement');

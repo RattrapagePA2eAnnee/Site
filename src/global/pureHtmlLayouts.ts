@@ -1,5 +1,7 @@
-export const htmlBookPlaneLayout = `<div>
+export const htmlBookPlaneLayout = `<div id="planelayout">
+<iframe src="/calendar.html"></iframe>
 <form>
+    <h2>Réserver un avion</h2>
     <div style="display: flex">
         <input type="date" name="startDate" id="startDate">
         <input type="time" name="startTime" id="startHour" step="900">
@@ -19,7 +21,12 @@ export const htmlBookPlaneLayout = `<div>
 </form>
 </div>`;
 
-export const htmlPrestationLayout = `        <header style="height: 10%;">
+
+export const htmlPrestationLayout = `<div class="stb-html-layout" id="presta">
+
+<main>
+<section>
+<header>
 <select id="prestationSelector">
     <option value="none"></option>
     <option value="land">Aterissage</option>
@@ -29,11 +36,9 @@ export const htmlPrestationLayout = `        <header style="height: 10%;">
     <option value="oParking">Emplacement</option>
 </select>
 </header>
-<main style="display: flex;width: 100%; height: 90%">
-<section style="width: 80%; height: 100%">
     <form hidden id="land">
+        <label for="landingDate">Date/hour: </label>
         <div>
-            <label for="landingDate">Date/hour: </label>
             <input type="date" id="landingDate">
             <input type="time" id="timeLanding">
         </div>
@@ -115,7 +120,8 @@ export const htmlPrestationLayout = `        <header style="height: 10%;">
         <button type="button" id="addOParking">Add</button>
     </form>
 </section>
-<aside style="width: 20%;height: 100%; background-color: green;display: flex; flex-direction: column;justify-content: space-between;align-items: center;">
+</main>
+<aside>
     <ul id="recapitulate">
         
     </ul>
@@ -124,4 +130,44 @@ export const htmlPrestationLayout = `        <header style="height: 10%;">
         <button type="button" id="pay">Pay</button>
     </div>
 </aside>
-</main>`;
+</div>`;
+
+export const htmlActivityLayout = `
+<div class="stb-html-layout">
+<form class="form-solo">
+<select id="activitySelector">
+    <option value="jump">Saut en parachute (300€)</option>
+    <option value="wind">Baptême de l'air (200€)</option>
+</select>
+<input type="date" id="date">
+<input type="time" id="hour">
+<button type="button" id="joinActivity">S'inscrire</button>
+</form>
+</div>`;
+
+export const htmlCourseLayout = `
+<div class="stb-html-layout">
+<form class="form-solo">
+<select id="courseSelector">
+            
+</select>
+<button type="button" id="joinCourse">Join</button>
+</form>
+</div>`;
+
+export const htmlProfilLayout = ` <section id="user-header">
+<div id="profile-infos">
+    <div id="user-picture">
+
+    </div>
+    <div id="user-infos">
+        <h2>John Doe</h2>
+        <h4>Admin</h4>
+    </div>
+</div>
+<nav>
+    <ul>
+
+    </ul>
+</nav>
+</section>`

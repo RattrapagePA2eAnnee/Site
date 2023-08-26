@@ -4,13 +4,19 @@ import { MenuOption } from "./components/menu/MenuOption.js";
 import { MenuSection } from "./components/menu/MenuSection.js";
 import { GestionList } from "./global/GestionList.js";
 import { Layout } from "./global/Layout.js";
-import { htmlBookPlaneLayout } from "./global/pureHtmlLayouts.js";
+import { htmlBookPlaneLayout, htmlPrestationLayout, htmlActivityLayout, htmlCourseLayout, htmlProfilLayout } from "./global/pureHtmlLayouts.js";
 import { runScript } from "./global/bookPlane.js";
-import { htmlPrestationLayout } from "./global/pureHtmlLayouts.js";
 import { prestations } from "./global/prestations.js";
+import { activity } from "./global/activity.js";
+import { course } from "./global/courses.js";
+import { profil } from "./global/profil.js";
 
+const priceSettingsContent = document.createElement("iframe");
+priceSettingsContent.src = "/pricesettings.php";
+priceSettingsContent.style.width = "100%";
+priceSettingsContent.style.height = "100%";
+priceSettingsContent.style.border = "none";
 
-const img = "/global/img/facebook.svg"
 let userListContent: HTMLElement;
 let courseListContent: HTMLElement;
 let courseParticipationListContent: HTMLElement;
@@ -69,6 +75,10 @@ setListContent().then(() => {
         const newCourseLayout = new Layout("Start Course", ["Courses"], document.createElement("div"), layoutContainer);
         const reservationPlane = new Layout("Book Plane", ["Reservation"], htmlBookPlaneLayout ,layoutContainer, runScript);
         const prestationsLayout = new Layout("Prestations", ["Services"], htmlPrestationLayout, layoutContainer, prestations);
+        const priceSettingsLayout = new Layout("Prices", ["Administration"], priceSettingsContent, layoutContainer);
+        const activityLayout = new Layout("Activities", ["Reservation", "Activities"], htmlActivityLayout, layoutContainer, activity);
+        const courseLayout = new Layout("Courses", ["Join"], htmlCourseLayout, layoutContainer, course);
+        const profilLayout = new Layout("Profil", ["Profil"], htmlProfilLayout, layoutContainer, profil);
         userListLayout.generate();
         courseListLayout.generate();
         courseParticipationListLayout.generate();
@@ -84,10 +94,16 @@ setListContent().then(() => {
         newCourseLayout.generate();
         reservationPlane.generate();
         prestationsLayout.generate();
+        priceSettingsLayout.generate();
+        activityLayout.generate();
+        courseLayout.generate();
+        profilLayout.generate();
+
         const menuContainer = document.getElementsByTagName("aside")[0];
     
     const menu = new LayoutSwitchMenu([
-        new MenuSection(img, "Administration", [
+        new MenuOption("Profil", profilLayout, "/global/img/user.svg"),
+        new MenuSection("/global/img/gear.svg", "Administration", [
             new MenuOption("Courses", courseListLayout),
             new MenuOption("Courses Participations", courseParticipationListLayout),
             //new MenuOption("Invoices", invoiceListLayout),
@@ -100,13 +116,11 @@ setListContent().then(() => {
             new MenuOption("Service Reservation", serviceReservationListLayout),
             new MenuOption("Users", userListLayout)
         ]),
-        new MenuSection(img, "Courses", [
-            new MenuOption("Start course", newCourseLayout)
-        ]),
-        new MenuSection(img, "Reservation", [
-            new MenuOption("Plane", reservationPlane)
-        ]),
-        new MenuOption("Prestations", prestationsLayout, img)
+        new MenuOption("Réservation avion", reservationPlane,"/global/img/plane.svg"),
+        new MenuOption("Prestations", prestationsLayout, "/global/img/handshake.svg"),
+        new MenuOption("Activities", activityLayout, "/global/img/parachute.svg"),
+        new MenuOption("Courses", courseLayout, "/global/img/book.svg"),
+        new MenuOption("Prices", priceSettingsLayout, "/global/img/euro.svg")
     ], menuContainer);
     menu.generate();
     }

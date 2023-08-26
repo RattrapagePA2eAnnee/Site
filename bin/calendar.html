@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planning de réservation des avions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        td, th {
+            border: 1px solid black;
+            padding: 0;
+            text-align: center;
+            height: 40px;
+            position: relative;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .quarter {
+            height: 100%;
+            width: 25%;
+            position: absolute;
+            top: 0;
+        }
+        .reserved {
+            background-color: green;
+        }
+        #navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="navigation">
+    <button onclick="changeDate(-1)">Jour précédent</button>
+    <span id="currentDate"></span>
+    <button onclick="changeDate(1)">Jour suivant</button>
+</div>
+
+<table id="planning">
+</table>
+
+<script type="module">
+import { API } from "../API/API.js";
+
+const HOURS = [
+    "00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00",
+    "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00",
+    "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"
+];
+
+let currentDate = new Date();
+const planeData = {};
+
+window.onload = function() {
+    getInfos(generateTable, currentDate);
+};
+
+
+
+async function getInfos(callback, currentDate) {
+    let formattedCurrentDate = formatDateForAPI(currentDate);
+    
+    // Fetch planesResponse from your API
+    const planesResponse = await API.getPlanes();
+    if (!planesResponse || planesResponse.length === 0) {
+        console.error("Failed to fetch planes data.");
+        return;
+    }
+
+    // Adjust the following line as per the structure of your API's response if needed
+    const PLANES = planesResponse.map(plane => plane.plane_name.value);
+    initializeData(PLANES);  // Initialize data structure for all planes regardless of reservations
+    
+    // Fetch reservations for the current date from your API
+    const apiResponse = await API.getPlanesReservations(formattedCurrentDate);
+
+    // If the 'success' property exists and is true, update with reservation data
+    if (apiResponse && apiResponse.messages && apiResponse.messages.success) {
+        updateDataWithReservations(apiResponse.messages.reservations);
+    } else {
+        console.log(apiResponse.messages.message);  // Logging the message
+    }
+
+    // Render the calendar (with reservations if they exist, or empty if they don't)
+    callback(PLANES);
+}
+
+
+
+
+
+
+
+function initializeData(PLANES) {
+    for (const plane of PLANES) {
+        planeData[plane] = new Array(96).fill(false);
+    }
+}
+
+function updateDataWithReservations(reservationsData) {
+    for (const planeId in reservationsData) {
+        const reservations = reservationsData[planeId];
+        for (const reservation of reservations) {
+            const startTime = new Date(reservation.start_time);
+            const endTime = new Date(reservation.end_time);
+            const startHour = startTime.getHours();
+            const startMinutes = startTime.getMinutes();
+            const endHour = endTime.getHours();
+            const endMinutes = endTime.getMinutes();
+
+            const startIndex = startHour * 4 + Math.floor(startMinutes / 15);
+            const endIndex = endHour * 4 + Math.floor(endMinutes / 15) - 1;
+
+            if (startTime.toDateString() !== endTime.toDateString()) {
+                if (startTime.toDateString() === currentDate.toDateString()) {
+                    for (let i = startIndex; i < 96; i++) {
+                        planeData[planeId][i] = true;
+                    }
+                } 
+                if (endTime.toDateString() === currentDate.toDateString()) {
+                    for (let i = 0; i <= endIndex; i++) {
+                        planeData[planeId][i] = true;
+                    }
+                }
+            } else if (startTime.toDateString() === currentDate.toDateString()) {
+                for (let i = startIndex; i <= endIndex; i++) {
+                    planeData[planeId][i] = true;
+                }
+            }
+        }
+    }
+}
+
+
+
+
+function formatDateForAPI(date) {
+    date = new Date (date)
+    return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
+function generateTable(PLANES) {
+    console.log("move");
+    const table = document.getElementById("planning");
+    table.innerHTML = '';
+    document.getElementById("currentDate").textContent = formatDateForAPI(currentDate);
+
+    let header = "<tr><th>Avions \\ Heures</th>";
+    for (const hour of HOURS) {
+        header += `<th>${hour}</th>`;
+    }
+    header += "</tr>";
+    table.innerHTML += header;
+
+    for (const plane of PLANES) {
+        let row = `<tr><td>${plane}</td>`;
+        for (let hour = 0; hour < 24; hour++) {
+            row += `<td>`;
+            for (let i = 0; i < 4; i++) {
+                const quarterClass = planeData[plane][hour * 4 + i] ? 'reserved' : '';
+                row += `<div class="quarter ${quarterClass}" style="left:${i*25}%"></div>`;
+            }
+            row += `</td>`;
+        }
+        row += "</tr>";
+        table.innerHTML += row;
+    }
+}
+
+const changeDate = (diff) => {
+    currentDate.setDate(currentDate.getDate() + diff);
+    getInfos(generateTable, currentDate);
+}
+
+
+window.changeDate = changeDate;
+
+
+// Your apiResponse data
+</script>
+</body>
+</html>

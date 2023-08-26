@@ -1,6 +1,7 @@
 import { API } from "../API/API.js";
 import { Plane } from "../API/APIObjects/Plane.js";
 import { User } from "../API/APIObjects/User.js";
+import { Popup } from "./Popup.js";
 
 
 
@@ -40,6 +41,7 @@ const getInstructorDisponibility = async (instructor: User, startDate: string, e
 
 export const runScript = () => {
     getInfos().then(() => {
+
         const planeSelector = <HTMLSelectElement> document.getElementById("selectPlane");
         const instructorSelector = <HTMLSelectElement> document.getElementById("selectInstructor");
 
@@ -150,7 +152,17 @@ export const runScript = () => {
                 } else {
                     body.type = "private";
                 }
-                API.createPlaneReservation(body);
+                API.createPlaneReservation(body).then(() => {
+                    const p = document.createElement("p");
+                    p.innerHTML = "Réservation effectuée: <a href='/test.html'>Accueil</a>";
+                    const validpopup = new Popup(p, "");
+                    validpopup.generate();
+                }).catch(() => {
+                    const p = document.createElement("p");
+                    p.innerHTML = "Echec réservation: <a href='/test.html'>Accueil</a>";
+                    const unvalidpopup = new Popup(p, "");
+                    unvalidpopup.generate();
+                })
             }
         }
     })

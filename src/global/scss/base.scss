@@ -3,3 +3,18 @@ body , html{
     padding: 0;
     margin: 0;
 }
+
+* {
+    font-family: 'Alumatica';
+}
+
+@font-face {
+    font-family: 'Alumatica';
+    src: url('/fonts/Alumatica-Regular.woff2') format('woff2');
+    src: url('/fonts/Alumatica-Regular.eot?') format('embedded-opentype'),
+         url('/fonts/Alumatica-Regular.woff2') format('woff2'),
+         url('/fonts/Alumatica-Regular.woff') format('woff'),
+         url('/fonts/Alumatica-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}

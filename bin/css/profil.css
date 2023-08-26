@@ -1,0 +1,65 @@
+main {
+    height: 100%;
+}
+#user-header {
+    height: 40%;
+    width: 100%;
+    background-image: url('/img/bg-user.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border: solid 2px  rgb(244, 246, 248);
+}
+
+#user-header nav {
+    width: 100%;
+    background-color: white;
+    display:flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+#user-header nav ul {
+    display: flex;
+    width: 50%;
+    justify-content: space-around;
+    list-style-type: none;
+}
+
+#profile-infos {
+    height: 43%;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    padding: 0 5% 0 5%;
+    position: relative;
+    top: 10%;
+}
+
+#user-picture{
+    height: 100%;
+    aspect-ratio: 1/1;
+    background-color: blue;
+    border-radius: 100px;
+}
+
+#user-infos {
+    color: white;
+    line-height: 0.5;
+    margin-left: 5%;
+    align-self: flex-end;
+    margin-bottom: 5%;
+}
+
+#user-infos h4 {
+    opacity: 0.5;
+}
+
+#schedule {
+    height: 50%;
+    width: 100%;
+}

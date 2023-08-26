@@ -25,7 +25,7 @@ export class API {
                                 const userToken = userInfos.connection.connection.token;
                                 document.cookie = `token=${userToken}`;
                                 const userId = userInfos.connection.connection.id;
-                                document.cookie = `id=${userId}`;
+                                document.cookie = `user_id=${userId}`;
                                 const win: Window = window;
                                 win.location = './test.html';
                             }
@@ -597,5 +597,67 @@ static getPlanes(): Promise<Array<Plane>> {
             planeDispoRequest.send(JSON.stringify(body));
         });
 }
+
+static getPlanesReservations(d: string) {
+    return new Promise((resolve, reject) => {
+        const date: Date = new Date(d)
+        const getPlanesRequest = new XMLHttpRequest();
+        getPlanesRequest.open("POST", `${API.address}/planesreservations`);
+        getPlanesRequest.onreadystatechange = () => {
+            if (getPlanesRequest.readyState === 4) {
+                if (getPlanesRequest.status === 200) {
+                    const response = JSON.parse(getPlanesRequest.responseText);
+                    if(response.sucess === false){
+                        resolve(false)
+                    }
+                    console.log(response);
+                    resolve(response);  // Il est important de résoudre la promesse avec la réponse.
+                } else {
+                    reject(new Error(`Request failed with status: ${getPlanesRequest.status}`)); // Il est important de rejeter la promesse en cas d'erreur.
+                }
+            }
+        };
+
+        // Calcul de la date du jour suivant
+        const nextDate = new Date(date);  // Créez une copie de la date pour ne pas modifier l'originale
+    nextDate.setDate(date.getDate() + 1);
+
+
+        // Conversion des dates au format YYYY-MM-DD
+        const formattedDate = `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+        const formattedNextDate = `${nextDate.getFullYear()}-${String(nextDate.getMonth()+1).padStart(2, '0')}-${String(nextDate.getDate()).padStart(2, '0')}`;
+
+        // Création de l'objet data à envoyer
+        const data = {
+            start_time: formattedDate,
+            end_time: formattedNextDate
+        };
+
+        getPlanesRequest.setRequestHeader("Content-type", "application/json");
+        getPlanesRequest.send(JSON.stringify(data));
+    });
+}
+
+    static infosUser(): Promise<Object> {
+        
+        const infosUserRequest = new XMLHttpRequest();
+        return new Promise(resolve => {
+            infosUserRequest.open("POST", `${API.address}/infosusers`);
+            infosUserRequest.onreadystatechange = () => {
+                if(infosUserRequest.readyState === 4) {
+                    if(infosUserRequest.status === 200) {
+                        const response = JSON.parse(infosUserRequest.responseText);
+                        if(response.success == true) {
+                            resolve(response.reservations);
+                        }
+                    }
+                }
+            }
+    
+            infosUserRequest.setRequestHeader("Content-type", "application/json");
+            infosUserRequest.send(JSON.stringify({user_id: 2}));
+        })
+
+    }
 
 }
