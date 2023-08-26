@@ -10,6 +10,7 @@ import { prestations } from "./global/prestations.js";
 import { activity } from "./global/activity.js";
 import { course } from "./global/courses.js";
 import { profil } from "./global/profil.js";
+import { MenuComponent } from "./components/menu/MenuComponent.js";
 
 const priceSettingsContent = document.createElement("iframe");
 priceSettingsContent.src = "/pricesettings.php";
@@ -105,29 +106,40 @@ setListContent().then(() => {
         profilLayout.generate();
 
         const menuContainer = document.getElementsByTagName("aside")[0];
+
+        let options: Array<MenuComponent> = [
+            new MenuOption("Profil", profilLayout, "/global/img/user.svg"),
+            new MenuOption("Réservation avion", reservationPlane,"/global/img/plane.svg"),
+            new MenuOption("Prestations", prestationsLayout, "/global/img/handshake.svg"),
+            new MenuOption("Activities", activityLayout, "/global/img/parachute.svg"),
+            new MenuOption("Courses", courseLayout, "/global/img/book.svg")
+        ];
+
+        if(API.getCookie("role") == "ADMIN") {
+            const adminOptions: Array<MenuComponent> = [
+                new MenuSection("/global/img/gear.svg", "Administration", [
+                    new MenuOption("Courses", courseListLayout),
+                    new MenuOption("Courses Participations", courseParticipationListLayout),
+                    //new MenuOption("Invoices", invoiceListLayout),
+                    new MenuOption("Lessons", lessonListLayout),
+                    new MenuOption("Parking", parkingListLayout),
+                    new MenuOption("Parking Reservations", parkingReservationListLayout),
+                    new MenuOption("Planes", planeListLayout),
+                    new MenuOption("Plane Reservations", planeReservationListLayout),
+                    //new MenuOption("Reservations", reservationListLayout),
+                    new MenuOption("Services", serviceListLayout),
+                    new MenuOption("Service Reservation", serviceReservationListLayout),
+                    new MenuOption("Users", userListLayout),
+                ]),
+                new MenuOption("Prices", priceSettingsLayout, "/global/img/euro.svg")
+            ]
+
+            for(const adminOption of adminOptions) {
+                options.push(adminOption)
+            }
+        }
     
-    const menu = new LayoutSwitchMenu([
-        new MenuOption("Profil", profilLayout, "/global/img/user.svg"),
-        new MenuSection("/global/img/gear.svg", "Administration", [
-            new MenuOption("Courses", courseListLayout),
-            new MenuOption("Courses Participations", courseParticipationListLayout),
-            //new MenuOption("Invoices", invoiceListLayout),
-            new MenuOption("Lessons", lessonListLayout),
-            new MenuOption("Parking", parkingListLayout),
-            new MenuOption("Parking Reservations", parkingReservationListLayout),
-            new MenuOption("Planes", planeListLayout),
-            new MenuOption("Plane Reservations", planeReservationListLayout),
-            //new MenuOption("Reservations", reservationListLayout),
-            new MenuOption("Services", serviceListLayout),
-            new MenuOption("Service Reservation", serviceReservationListLayout),
-            new MenuOption("Users", userListLayout)
-        ]),
-        new MenuOption("Réservation avion", reservationPlane,"/global/img/plane.svg"),
-        new MenuOption("Prestations", prestationsLayout, "/global/img/handshake.svg"),
-        new MenuOption("Activities", activityLayout, "/global/img/parachute.svg"),
-        new MenuOption("Courses", courseLayout, "/global/img/book.svg"),
-        new MenuOption("Prices", priceSettingsLayout, "/global/img/euro.svg")
-    ], menuContainer);
+    const menu = new LayoutSwitchMenu(options, menuContainer);
     menu.generate();
     }
 })

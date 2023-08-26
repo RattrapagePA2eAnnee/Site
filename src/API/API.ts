@@ -9,7 +9,6 @@ import { Service } from "./APIObjects/Service.js";
 import { ParkingReservation } from "./APIObjects/ParkingReservation.js";
 import { PlaneReservation } from "./APIObjects/PlaneReservation.js";
 import { ServiceReservation } from "./APIObjects/ServiceReservation.js";
-import { Plane } from "./APIObjects/Plane.js";
 import { Lesson } from "./APIObjects/Lesson.js";
 
 export class API {
@@ -28,6 +27,8 @@ export class API {
                                 document.cookie = `token=${userToken}`;
                                 const userId = userInfos.connection.connection.id;
                                 document.cookie = `user_id=${userId}`;
+                                const userRole = userInfos.connection.connection.role;
+                                document.cookie=`role=${userRole}`;
                                 const win: Window = window;
                                 win.location = './test.html';
                             }
