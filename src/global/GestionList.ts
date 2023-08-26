@@ -149,8 +149,10 @@ export class GestionList<T extends APIObject> {
             const editForm = new Form(editFormInputs, "Edit");
             editForm.setSendFunction(() => {
                 const values = editForm.export();
-                console.log(values)
-                API.edit(this.route, values.id ,values.body);
+                console.log(element);
+                console.log(element.id);
+                console.log(element.id.value);
+                API.edit(this.route, element.id.value ,values.body);
             })
 
             const editPopup = new Popup(editForm.getForm(), "Edit");

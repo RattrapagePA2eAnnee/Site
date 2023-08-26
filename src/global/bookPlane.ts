@@ -2,6 +2,8 @@ import { API } from "../API/API.js";
 import { Plane } from "../API/APIObjects/Plane.js";
 import { User } from "../API/APIObjects/User.js";
 
+
+
 let planes: Array<Plane>;
 let instructors: Array<User>;
 let availablePlanes: Array<Plane>;
@@ -125,7 +127,7 @@ export const runScript = () => {
         const sendButton = <HTMLButtonElement> document.getElementById("bookPlane");
         if(sendButton) {
             sendButton.onclick = () => {
-                const maxFlyTime = ((new Date(Date.parse(fullEndTime)).getTime() - new Date(Date.parse(fullStartTime)).getTime())) / (60 * 60);
+                const maxFlyTime = ((new Date(Date.parse(fullEndTime)).getTime() - new Date(Date.parse(fullStartTime)).getTime())) / (60 * 60 * 1000);
                 let price: number = 0;
                 for(const plane of planes) {
                     if(plane.id.value = planeSelector.value) {

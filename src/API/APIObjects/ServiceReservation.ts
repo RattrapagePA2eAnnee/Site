@@ -1,11 +1,16 @@
 import { APIObject, APIAttribute } from "../../global/APIObject.js";
 
 export class ServiceReservation implements APIObject {
+    public id: APIAttribute;
     public reservation_id: APIAttribute;
     public service_id: APIAttribute;
     public status: APIAttribute;
 
-    constructor(reservation_id: string, service_id: string, status: string) {
+    constructor(id: string, reservation_id: string, service_id: string, status: string) {
+        this.id = {
+            value: id,
+            detail: true
+        };
         this.reservation_id = {
             value: reservation_id,
             detail: true

@@ -1,7 +1,7 @@
 {
     "tarifs": {
       "redevance_atterrissage": {
-        "mono_turbine": {
+        "turbine": {
           "weekend_jf": {
             "hors_taxes": 34.50,
             "tva": 6.90,
@@ -23,7 +23,7 @@
             "ttc": 18.30
           }
         },
-        "bi_turbine": {
+        "reacteur": {
           "weekend_jf": {
             "hors_taxes": 41.17,
             "tva": 8.23,
@@ -101,16 +101,54 @@
       },
       "redevance_abris": {
         "categorie_1": {
-          "sous_60m2": {
-            "mass_lt_0.5t": {
-              "tarif_mensuel_aeronefs_bases": 150.00,
-              "tarif_journalier_aeronefs_bases": 5.50,
-              "tarif_journalier_aeronefs_non_bases": 9.38
+            "base": {
+                "mensuel": {
+                    "hors_taxes": 150,
+                    "ttc": 180
+                },
+                "unite": {
+                    "hors_taxes": 5.5,
+                    "ttc": 6.6
+                }
+            },
+            "unite": {
+                "hors_taxes": 9.38,
+                "ttc": 11.25
             }
-          }
+        },
+        "categorie_2": {
+            "base": {
+                "mensuel": {
+                    "hors_taxes": 116.67,
+                    "ttc": 140
+                },
+                "unite": {
+                    "hors_taxes": 4.33,
+                    "ttc": 5.2
+                }
+            },
+            "unite": {
+                "hors_taxes": 7.29,
+                "ttc": 8.75
+            }
+        }, "categorie_3": {
+            "base": {
+                "mensuel": {
+                    "hors_taxes": 70.83,
+                    "ttc": 85
+                },
+                "unite": {
+                    "hors_taxes": 2.63,
+                    "ttc": 3.15
+                }
+            },
+            "unite": {
+                "hors_taxes": 4.42,
+                "ttc": 5.30
+            }
         }
       },
-      "tarifs_produits_petroliers": {
+      "produits_petroliers": {
         "JETA1_sans_TIC": {
           "hors_taxes": 1.01,
           "tva": 0.20,
@@ -126,7 +164,7 @@
           "tva": 0.27,
           "ttc": 1.63
         },
-        "AVGAS_100LL_TIC": {
+        "AVGAS_100LL_plus_TIC": {
           "hors_taxes": 1.92,
           "tva": 0.38,
           "ttc": 2.30

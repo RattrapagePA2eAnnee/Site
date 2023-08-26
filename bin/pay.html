@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Formulaire de paiement</title>
+  <link rel="stylesheet" href="../../css/popup.css">
+</head>
+<body>
+  <div id="payment-form">
+    <h1>Formulaire de paiement</h1>
+    <div id="card-element">
+      <!-- L'élément où s'affichera le champ de la carte de paiement -->
+    </div>
+    <div id="card-errors"></div>
+    <button id="submit">Payer</button>
+  </div>
+  
+  <script src="https://js.stripe.com/v3/"></script>
+  <script type="module">
+    import {API} from "/API/API.js"
+    // Initialisation de Stripe avec la clé publique
+    var stripe = Stripe('pk_test_51NOgBaDOtbT2jeqrWCOa9rsNv2ayhhTupdlh7R1P17uV8hsljrsNoQIY9K66pYP3m7DJ54npqtHokYLZsT2br8kC00O0Pyp06L');
+  
+    // Création de l'élément de la carte de paiement
+    var elements = stripe.elements();
+    var style = {
+      base: {
+        fontSize: '16px',
+        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+        color: '#555',
+        '::placeholder': {
+          color: '#777',
+        },
+      },
+    };
+    var cardElement = elements.create('card', { style: style });
+  
+    // Montre l'élément de la carte de paiement dans le formulaire
+    cardElement.mount('#card-element');
+  
+    // Gestion de la soumission du formulaire
+    var submitButton = document.getElementById('submit');
+    submitButton.addEventListener('click', function(event) {
+      event.preventDefault();
+      
+      // Récupération du montant du paiement depuis le formulaire// Remplacez par votre logique de calcul du prix total
+      // Récupérer les informations de la carte de crédit
+      stripe.createPaymentMethod({
+        type: 'card',
+        card: cardElement
+      }).then(function(result) {
+        if (result.error) {
+          // Gérer les erreurs de carte de crédit
+          var errorElement = document.getElementById('card-errors');
+          errorElement.textContent = result.error.message;
+        } else {
+
+          const prixTotal = API.getCookie("prixTotal");
+
+          // Envoyer le paiement au serveur via une requête AJAX
+          var token = result.paymentMethod.id;
+          var amount = prixTotal * 100;
+          const prestationsR = API.getCookie("prestations");
+          const prestations = JSON.parse(prestationsR);
+          var xhr = new XMLHttpRequest();
+          xhr.open('POST', 'https://api.aen.best/stripeapi', true);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.onload = function() {
+
+            const calls = async () => {
+              for(const prestation of prestations) {
+                await API.add(prestation.route, JSON.stringify(prestation.body));
+              }
+              if (top.location!= self.location) {
+                top.location = "http://aen.local/test.html";
+              }
+            }
+            if (xhr.status === 200) {
+              console.log('Paiement effectué avec succès !');
+              calls();
+            } else {
+              // Gérer les erreurs de traitement du paiement
+              console.error('Erreur lors du traitement du paiement');
+            }
+          };
+          xhr.onerror = function() {
+            // Gérer les erreurs de requête
+            console.error('Erreur de requête');
+          };
+          xhr.send(JSON.stringify({
+            token: token,
+            amount: amount
+          }));
+        }
+      });
+    });
+  </script>
+</body>
+</html>

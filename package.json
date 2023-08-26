@@ -15,5 +15,8 @@
     "tsc": "^2.0.4"
   },
   "devDependencies": {},
+  "bin": {
+    "siterattrapage": "bin/login.js"
+  },
   "description": ""
 }

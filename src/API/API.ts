@@ -9,7 +9,6 @@ import { Service } from "./APIObjects/Service.js";
 import { ParkingReservation } from "./APIObjects/ParkingReservation.js";
 import { PlaneReservation } from "./APIObjects/PlaneReservation.js";
 import { ServiceReservation } from "./APIObjects/ServiceReservation.js";
-import { Plane } from "./APIObjects/Plane.js";
 
 export class API {
         static address = "https://api.aen.best";
@@ -252,6 +251,7 @@ export class API {
                         const parkingReservations: Array<ParkingReservation> = [];
                         response.parkingreservations.forEach((parkingReservation: any) => {
                             parkingReservations.push(new ParkingReservation(
+                                parkingReservation.id,
                                 parkingReservation.reservation_id,
                                 parkingReservation.parking_id,
                                 parkingReservation.start_time,
@@ -284,13 +284,15 @@ export class API {
                     if(response.success == true){
                         const planeReservations: Array<PlaneReservation> = [];
                         response.planereservations.forEach((planeReservation: any) => {
+                            console.log(planeReservation.instructor_id);
                             planeReservations.push(new PlaneReservation(
+                                planeReservation.id,
                                 planeReservation.reservation_id,
-                                planeReservation.parking_id,
+                                planeReservation.plane_id,
                                 planeReservation.start_time,
                                 planeReservation.end_time,
                                 planeReservation.price,
-                                planeReservation.intstructor_id,
+                                planeReservation.instructor_id,
                                 planeReservation.status,
                                 planeReservation.type
                             ));
@@ -320,6 +322,7 @@ export class API {
                         const serviceReservations: Array<ServiceReservation> = [];
                         response.servicereservations.forEach((serviceReservation: any) => {
                             serviceReservations.push(new ServiceReservation(
+                                serviceReservation.id,
                                 serviceReservation.reservation_id,
                                 serviceReservation.service_id,
                                 serviceReservation.status
@@ -351,6 +354,7 @@ export class API {
                         const coursesParticipations: Array<CourseParticipation> = [];
                         response.courseparticipations.forEach((courseParticipation: any) => {
                             coursesParticipations.push(new CourseParticipation(
+                                courseParticipation.id,
                                 courseParticipation.user_id,
                                 courseParticipation.course_id,
                                 courseParticipation.participation_date_time,
@@ -398,9 +402,11 @@ static getPlanes(): Promise<Array<Plane>> {
                 }
             }
         }
+    }
         getPlanesRequest.setRequestHeader("Content-type", "application/json");
         getPlanesRequest.send();
     });
+
     }
 
     static edit(route: string, id: any, body: string) {
@@ -533,4 +539,63 @@ static getPlanes(): Promise<Array<Plane>> {
             planeReservationRequest.send(JSON.stringify(body));
         })
     }
+
+    static getCookie(cookie: string): string | null {
+        const cookies = document.cookie;
+        const cookieKey = `${cookie}=`;
+        const cookieStart = cookies.indexOf(cookieKey);
+        let value = null;
+    
+        if (cookieStart !== -1) {
+            let cookieEnd = cookies.indexOf(";", cookieStart);
+            if (cookieEnd === -1) {
+                cookieEnd = cookies.length;
+            }
+            value = decodeURIComponent(cookies.substring(cookieStart + cookieKey.length, cookieEnd));
+        }
+        return value;
+    }
+
+    static addReservation(body: string): Promise<number> {
+        const addRequest = new XMLHttpRequest();
+        return new Promise(resolve => {
+            addRequest.open("POST", `${API.address}/reservations`);
+            addRequest.onreadystatechange = () => {
+                if(addRequest.readyState === 4){
+                    if(addRequest.status === 200){
+                        const userInfos = JSON.parse(addRequest.responseText);
+                        if(userInfos.success == true){
+                            resolve(userInfos.lastInsertedId);
+                        }
+                    }
+                }
+            }
+        // loginRequest.setRequestHeader("Accept", "application/json")
+        addRequest.setRequestHeader("Content-type", "application/json");
+        addRequest.send(body);
+        })
+    }
+
+    static getParkingDisponibility(body: Object): Promise<number> {
+
+        const planeDispoRequest = new XMLHttpRequest();
+        return new Promise((resolve, reject) => {
+            planeDispoRequest.open("POST", `${API.address}/parkingdisponibility`);
+            planeDispoRequest.onreadystatechange = () => {
+                if(planeDispoRequest.readyState === 4){
+                    if(planeDispoRequest.status === 200){
+                        const planeInfos = JSON.parse(planeDispoRequest.responseText);
+                        if(planeInfos.success == true){
+                                resolve(planeInfos.parkings[0].id);
+                        } else {
+                            reject(false);
+                        }
+                    }
+                }
+            }
+            planeDispoRequest.setRequestHeader("Content-type", "application/json");
+            planeDispoRequest.send(JSON.stringify(body));
+        });
+}
+
 }
