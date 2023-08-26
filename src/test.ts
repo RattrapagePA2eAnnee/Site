@@ -15,6 +15,7 @@ let userListContent: HTMLElement;
 let courseListContent: HTMLElement;
 let courseParticipationListContent: HTMLElement;
 //let invoiceListContent: HTMLElement;
+let lessonListContent: HTMLElement;
 let parkingListContent: HTMLElement;
 let parkingReservationListContent: HTMLElement;
 let planeListContent: HTMLElement;
@@ -28,6 +29,7 @@ const setListContent = async () => {
     courseListContent = await gestionList(API.getCourses, "courses");
     courseParticipationListContent = await gestionList(API.getCourseParticipation, "coursesparticipations");
     //invoiceListContent = await gestionList(API.getInvoices, "invoice");
+    lessonListContent = await gestionList(API.getLessons, "lessons");
     parkingListContent = await gestionList(API.getParkings, "parkings");
     parkingReservationListContent = await gestionList(API.getParkingReservation, "parkingreservations");
     planeListContent = await gestionList(API.getPlanes, "planes");
@@ -44,6 +46,7 @@ setListContent().then(() => {
     let courseListLayout: Layout;
     let courseParticipationListLayout : Layout;
     //let invoiceListLayout : Layout;
+    let lessonListLayout : Layout;
     let parkingListLayout : Layout;
     let parkingReservationListLayout : Layout;
     let planeListLayout : Layout;
@@ -58,6 +61,7 @@ setListContent().then(() => {
         courseListLayout = new Layout("Courses", ["Administration", "Management"], courseListContent, layoutContainer);
         courseParticipationListLayout = new Layout("Course Participations", ["Administration", "Management"], courseParticipationListContent, layoutContainer);
         //invoiceListLayout = new Layout("Invoices", ["Administration", "Management"], invoiceListContent, layoutContainer);
+        lessonListLayout = new Layout("Lessons", ["Administration", "Management"], lessonListContent, layoutContainer);
         parkingListLayout = new Layout("Parkings", ["Administration", "Management"], parkingListContent, layoutContainer);
         parkingReservationListLayout = new Layout("Parking Reservations", ["Administration", "Management"], parkingReservationListContent, layoutContainer);
         planeListLayout = new Layout("Planes", ["Administration", "Management"], planeListContent, layoutContainer);
@@ -73,6 +77,7 @@ setListContent().then(() => {
         courseListLayout.generate();
         courseParticipationListLayout.generate();
         //invoiceListLayout.generate();
+        lessonListLayout.generate();
         parkingListLayout.generate();
         parkingReservationListLayout.generate();
         planeListLayout.generate();
@@ -91,6 +96,7 @@ setListContent().then(() => {
             new MenuOption("Courses", courseListLayout),
             new MenuOption("Courses Participations", courseParticipationListLayout),
             //new MenuOption("Invoices", invoiceListLayout),
+            new MenuOption("Lessons", lessonListLayout),
             new MenuOption("Parking", parkingListLayout),
             new MenuOption("Parking Reservations", parkingReservationListLayout),
             new MenuOption("Planes", planeListLayout),

@@ -9,7 +9,7 @@ html, body{
 header{
     display: flex;
     width: 100%;
-    background-color: white;
+    background-color: rgb(12, 40, 92);
     height: 10vh;
 }
 
@@ -58,7 +58,8 @@ header>nav>ul:last-child{
 header a{
     font-family: Alumatica;
     font-weight: bold;
-    color: black;
+    font-size: large;
+    color: rgb(240, 240, 240);
     text-decoration: none;
     background: 
     radial-gradient( white, white),
