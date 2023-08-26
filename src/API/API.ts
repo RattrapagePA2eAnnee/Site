@@ -1,5 +1,6 @@
 import { Course } from "./APIObjects/Course.js";
 import { CourseParticipation } from "./APIObjects/CourseParticipation.js";
+import { Plane } from "./APIObjects/Plane.js";
 import { User } from "./APIObjects/User.js";
 import { Invoice } from "./APIObjects/Invoice.js";
 import { Parking } from "./APIObjects/Parking.js";
@@ -79,7 +80,7 @@ export class API {
         }
 
 
-        static getUsers(): Promise<Array<User>> {
+        static getUsers(body?: Object): Promise<Array<User>> {
                 return new Promise((resolve, reject) => {
                     const getUsersRequest = new XMLHttpRequest();
                 getUsersRequest.open("POST", `${API.address}/getusers`);
@@ -113,7 +114,7 @@ export class API {
             }
             // loginRequest.setRequestHeader("Accept", "application/json")
             getUsersRequest.setRequestHeader("Content-type", "application/json");
-            getUsersRequest.send();
+            getUsersRequest.send(JSON.stringify(body));
                 })
         }
 
@@ -285,6 +286,7 @@ export class API {
                         const parkingReservations: Array<ParkingReservation> = [];
                         response.parkingreservations.forEach((parkingReservation: any) => {
                             parkingReservations.push(new ParkingReservation(
+                                parkingReservation.id,
                                 parkingReservation.reservation_id,
                                 parkingReservation.parking_id,
                                 parkingReservation.start_time,
@@ -317,13 +319,15 @@ export class API {
                     if(response.success == true){
                         const planeReservations: Array<PlaneReservation> = [];
                         response.planereservations.forEach((planeReservation: any) => {
+                            console.log(planeReservation.instructor_id);
                             planeReservations.push(new PlaneReservation(
+                                planeReservation.id,
                                 planeReservation.reservation_id,
-                                planeReservation.parking_id,
+                                planeReservation.plane_id,
                                 planeReservation.start_time,
                                 planeReservation.end_time,
                                 planeReservation.price,
-                                planeReservation.intstructor_id,
+                                planeReservation.instructor_id,
                                 planeReservation.status,
                                 planeReservation.type
                             ));
@@ -353,6 +357,7 @@ export class API {
                         const serviceReservations: Array<ServiceReservation> = [];
                         response.servicereservations.forEach((serviceReservation: any) => {
                             serviceReservations.push(new ServiceReservation(
+                                serviceReservation.id,
                                 serviceReservation.reservation_id,
                                 serviceReservation.service_id,
                                 serviceReservation.status
@@ -384,6 +389,7 @@ export class API {
                         const coursesParticipations: Array<CourseParticipation> = [];
                         response.courseparticipations.forEach((courseParticipation: any) => {
                             coursesParticipations.push(new CourseParticipation(
+                                courseParticipation.id,
                                 courseParticipation.user_id,
                                 courseParticipation.course_id,
                                 courseParticipation.participation_date_time,
@@ -405,36 +411,37 @@ export class API {
         })
 }
 
-    static getPlanes(): Promise<Array<Plane>> {
-        return new Promise((resolve, reject) => {
-            const getPlanesRequest = new XMLHttpRequest();
-        getPlanesRequest.open("POST", `${API.address}/getplanes`);
-        getPlanesRequest.onreadystatechange = () => {
-            if(getPlanesRequest.readyState === 4){
-                if(getPlanesRequest.status === 200){
-                    const response = JSON.parse(getPlanesRequest.responseText);
-                    if(response.success == true){
-                        const planes: Array<Plane> = [];
-                        response.planes.forEach((plane: any) => {
-                            planes.push(new Plane(
-                                plane.id,
-                                plane.picture,
-                                plane.horometer,
-                                plane.plane_name,
-                                plane.plane_type,
-                                plane.hourly_price
-                            ));
-                            resolve(planes);
-                        });
-                    } else {
-                        reject(new Error(response.error));
-                    }
+static getPlanes(): Promise<Array<Plane>> {
+    return new Promise((resolve, reject) => {
+        const getPlanesRequest = new XMLHttpRequest();
+    getPlanesRequest.open("POST", `${API.address}/getplanes`);
+    getPlanesRequest.onreadystatechange = () => {
+        if(getPlanesRequest.readyState === 4){
+            if(getPlanesRequest.status === 200){
+                const response = JSON.parse(getPlanesRequest.responseText);
+                if(response.success == true){
+                    const planes: Array<Plane> = [];
+                    response.planes.forEach((plane: any) => {
+                        planes.push(new Plane(
+                            plane.id,
+                            plane.picture,
+                            plane.horometer,
+                            plane.plane_name,
+                            plane.plane_type,
+                            plane.hourly_price
+                        ));
+                        resolve(planes);
+                    });
+                } else {
+                    reject(new Error(response.error));
                 }
             }
         }
+    }
         getPlanesRequest.setRequestHeader("Content-type", "application/json");
         getPlanesRequest.send();
     });
+
     }
 
     static getLessons(): Promise<Array<Lesson>> {
@@ -531,4 +538,128 @@ export class API {
         console.log(e);
     }
     }
+
+    static getPlaneDisponibility(body: Object): Promise<boolean> {
+
+            const planeDispoRequest = new XMLHttpRequest();
+            return new Promise((resolve) => {
+                planeDispoRequest.open("POST", `${API.address}/planedisponibility`);
+                planeDispoRequest.onreadystatechange = () => {
+                    if(planeDispoRequest.readyState === 4){
+                        if(planeDispoRequest.status === 200){
+                            const planeInfos = JSON.parse(planeDispoRequest.responseText);
+                            if(planeInfos.success == true){
+                                    resolve(true);
+                            } else {
+                                resolve(false);
+                            }
+                        }
+                    }
+                }
+                planeDispoRequest.setRequestHeader("Content-type", "application/json");
+                planeDispoRequest.send(JSON.stringify(body));
+            });
+    }
+
+    static getInstructorDisponibility(body: Object): Promise<boolean> {
+
+        const planeDispoRequest = new XMLHttpRequest();
+        return new Promise((resolve) => {
+            planeDispoRequest.open("POST", `${API.address}/instructordisponibility`);
+            planeDispoRequest.onreadystatechange = () => {
+                if(planeDispoRequest.readyState === 4){
+                    if(planeDispoRequest.status === 200){
+                        const planeInfos = JSON.parse(planeDispoRequest.responseText);
+                        if(planeInfos.success == true){
+                                resolve(true);
+                        } else {
+                            resolve(false);
+                        }
+                    }
+                }
+            }
+            planeDispoRequest.setRequestHeader("Content-type", "application/json");
+            planeDispoRequest.send(JSON.stringify(body));
+        });
+}
+
+    static createPlaneReservation(body: Object) {
+        const planeReservationRequest = new XMLHttpRequest();
+        return new Promise(resolve => {
+            planeReservationRequest.open("POST", `${API.address}/planereservations`);
+            planeReservationRequest.onreadystatechange = () => {
+                if(planeReservationRequest.readyState === 4) {
+                    if(planeReservationRequest.status === 200) {
+                        const planeReservations = JSON.parse(planeReservationRequest.responseText);
+                        if(planeReservations.success == true){
+                                resolve(true);
+                        } else {
+                            resolve(false);
+                        }
+                    }
+                }
+            }
+            planeReservationRequest.setRequestHeader("Content-type", "application/json");
+            planeReservationRequest.send(JSON.stringify(body));
+        })
+    }
+
+    static getCookie(cookie: string): string | null {
+        const cookies = document.cookie;
+        const cookieKey = `${cookie}=`;
+        const cookieStart = cookies.indexOf(cookieKey);
+        let value = null;
+    
+        if (cookieStart !== -1) {
+            let cookieEnd = cookies.indexOf(";", cookieStart);
+            if (cookieEnd === -1) {
+                cookieEnd = cookies.length;
+            }
+            value = decodeURIComponent(cookies.substring(cookieStart + cookieKey.length, cookieEnd));
+        }
+        return value;
+    }
+
+    static addReservation(body: string): Promise<number> {
+        const addRequest = new XMLHttpRequest();
+        return new Promise(resolve => {
+            addRequest.open("POST", `${API.address}/reservations`);
+            addRequest.onreadystatechange = () => {
+                if(addRequest.readyState === 4){
+                    if(addRequest.status === 200){
+                        const userInfos = JSON.parse(addRequest.responseText);
+                        if(userInfos.success == true){
+                            resolve(userInfos.lastInsertedId);
+                        }
+                    }
+                }
+            }
+        // loginRequest.setRequestHeader("Accept", "application/json")
+        addRequest.setRequestHeader("Content-type", "application/json");
+        addRequest.send(body);
+        })
+    }
+
+    static getParkingDisponibility(body: Object): Promise<number> {
+
+        const planeDispoRequest = new XMLHttpRequest();
+        return new Promise((resolve, reject) => {
+            planeDispoRequest.open("POST", `${API.address}/parkingdisponibility`);
+            planeDispoRequest.onreadystatechange = () => {
+                if(planeDispoRequest.readyState === 4){
+                    if(planeDispoRequest.status === 200){
+                        const planeInfos = JSON.parse(planeDispoRequest.responseText);
+                        if(planeInfos.success == true){
+                                resolve(planeInfos.parkings[0].id);
+                        } else {
+                            reject(false);
+                        }
+                    }
+                }
+            }
+            planeDispoRequest.setRequestHeader("Content-type", "application/json");
+            planeDispoRequest.send(JSON.stringify(body));
+        });
+}
+
 }

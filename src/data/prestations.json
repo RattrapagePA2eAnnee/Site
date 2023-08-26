@@ -1,0 +1,174 @@
+{
+  "tarifs": {
+    "redevance_atterrissage": {
+      "turbine": {
+        "weekend_jf": {
+          "hors_taxes": 34.50,
+          "tva": 6.90,
+          "ttc": 41.40
+        },
+        "semaine": {
+          "hors_taxes": 31.17,
+          "tva": 6.23,
+          "ttc": 37.40
+        },
+        "avion_base_mensuel": {
+          "hors_taxes": 113.00,
+          "tva": 22.60,
+          "ttc": 135.60
+        },
+        "avion_base_unite": {
+          "hors_taxes": 15.25,
+          "tva": 3.05,
+          "ttc": 18.30
+        }
+      },
+      "reacteur": {
+        "weekend_jf": {
+          "hors_taxes": 41.17,
+          "tva": 8.23,
+          "ttc": 49.40
+        },
+        "semaine": {
+          "hors_taxes": 37.17,
+          "tva": 7.43,
+          "ttc": 44.60
+        },
+        "avion_base_mensuel": {
+          "hors_taxes": 120.00,
+          "tva": 24.00,
+          "ttc": 144.00
+        },
+        "avion_base_unite": {
+          "hors_taxes": 18.00,
+          "tva": 3.60,
+          "ttc": 21.60
+        }
+      }
+    },
+    "groupes_acoustiques": {
+      "1": {
+        "jour_soir": 1.300,
+        "nuit": 4.000
+      },
+      "2": {
+        "jour_soir": 1.200,
+        "nuit": 1.800
+      },
+      "3": {
+        "jour_soir": 1.150,
+        "nuit": 1.725
+      },
+      "4": {
+        "jour_soir": 1.000,
+        "nuit": 1.500
+      },
+      "5a": {
+        "jour_soir": 0.850,
+        "nuit": 1.275
+      },
+      "5b": {
+        "jour_soir": 0.700,
+        "nuit": 1.050
+      }
+    },
+    "redevance_helicopteres_ulm": {
+      "weekend_jf": {
+        "hors_taxes": 17.25,
+        "tva": 3.45,
+        "ttc": 20.70
+      },
+      "semaine": {
+        "hors_taxes": 15.58,
+        "tva": 3.12,
+        "ttc": 18.70
+      }
+    },
+    "frais_dossiers": {
+      "hors_taxes": 25.83,
+      "tva": 5.17,
+      "ttc": 31.00
+    },
+    "redevance_balisage": {
+      "hors_taxes": 13.00,
+      "tva": 2.60,
+      "ttc": 15.60
+    },
+    "redevance_stationnement_exterieur": {
+      "hors_taxes": 2.30,
+      "tva": 0.46,
+      "ttc": 2.76
+    },
+    "redevance_abris": {
+      "categorie_1": {
+          "base": {
+              "mensuel": {
+                  "hors_taxes": 150,
+                  "ttc": 180
+              },
+              "unite": {
+                  "hors_taxes": 5.5,
+                  "ttc": 6.6
+              }
+          },
+          "unite": {
+              "hors_taxes": 9.38,
+              "ttc": 11.25
+          }
+      },
+      "categorie_2": {
+          "base": {
+              "mensuel": {
+                  "hors_taxes": 116.67,
+                  "ttc": 140
+              },
+              "unite": {
+                  "hors_taxes": 4.33,
+                  "ttc": 5.2
+              }
+          },
+          "unite": {
+              "hors_taxes": 7.29,
+              "ttc": 8.75
+          }
+      }, "categorie_3": {
+          "base": {
+              "mensuel": {
+                  "hors_taxes": 70.83,
+                  "ttc": 85
+              },
+              "unite": {
+                  "hors_taxes": 2.63,
+                  "ttc": 3.15
+              }
+          },
+          "unite": {
+              "hors_taxes": 4.42,
+              "ttc": 5.30
+          }
+      }
+    },
+    "produits_petroliers": {
+      "JETA1_sans_TIC": {
+        "hors_taxes": 1.01,
+        "tva": 0.20,
+        "ttc": 1.21
+      },
+      "AVGAS_100LL_sans_TIC": {
+        "hors_taxes": 1.50,
+        "tva": 0.30,
+        "ttc": 1.80
+      },
+      "JETA1_A1_plus_TIC": {
+        "hors_taxes": 1.36,
+        "tva": 0.27,
+        "ttc": 1.63
+      },
+      "AVGAS_100LL_plus_TIC": {
+        "hors_taxes": 1.92,
+        "tva": 0.38,
+        "ttc": 2.30
+      }
+    }
+  }
+}

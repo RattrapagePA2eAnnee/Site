@@ -32,7 +32,12 @@ export class MenuOption extends MenuComponent {
         title.innerText = this.title;
         this.component.appendChild(title);
         this.component.onclick = () => {
-            const menuHTML = this.menu.getMenu();
+            const scripts = document.getElementsByTagName("script");
+            for(const script of scripts) {
+                if(script.src != "http://aen.local/test.js"){
+                    document.body.removeChild(script);
+                }
+            }
             const options = document.getElementsByClassName("stb-menu-option");
             for(const option of options) {
                 if(option.classList.contains("current")) {

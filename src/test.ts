@@ -4,6 +4,11 @@ import { MenuOption } from "./components/menu/MenuOption.js";
 import { MenuSection } from "./components/menu/MenuSection.js";
 import { GestionList } from "./global/GestionList.js";
 import { Layout } from "./global/Layout.js";
+import { htmlBookPlaneLayout } from "./global/pureHtmlLayouts.js";
+import { runScript } from "./global/bookPlane.js";
+import { htmlPrestationLayout } from "./global/pureHtmlLayouts.js";
+import { prestations } from "./global/prestations.js";
+
 
 const img = "/global/img/facebook.svg"
 let userListContent: HTMLElement;
@@ -64,10 +69,10 @@ setListContent().then(() => {
         //reservationListLayout = new Layout("Reservations", ["Administration", "Management"], reservationListContent, layoutContainer);
         serviceListLayout = new Layout("Services", ["Administration", "Management"], serviceListContent, layoutContainer);
         serviceReservationListLayout = new Layout("Service Reservations", ["Administration", "Management"], serviceReservationListContent, layoutContainer);
-
         const parkingLayout = new Layout("Parking", ["Reservation", "Prestations"], document.createElement("div"), layoutContainer);
         const newCourseLayout = new Layout("Start Course", ["Courses"], document.createElement("div"), layoutContainer);
-        const reservationPlane = new Layout("Book Plane", ["Reservation"], document.createElement("div") ,layoutContainer)
+        const reservationPlane = new Layout("Book Plane", ["Reservation"], htmlBookPlaneLayout ,layoutContainer, runScript);
+        const prestationsLayout = new Layout("Prestations", ["Services"], htmlPrestationLayout, layoutContainer, prestations);
         userListLayout.generate();
         courseListLayout.generate();
         courseParticipationListLayout.generate();
@@ -82,7 +87,8 @@ setListContent().then(() => {
         serviceReservationListLayout.generate();
         parkingLayout.generate();
         newCourseLayout.generate();
-        
+        reservationPlane.generate();
+        prestationsLayout.generate();
         const menuContainer = document.getElementsByTagName("aside")[0];
     
     const menu = new LayoutSwitchMenu([
@@ -105,10 +111,9 @@ setListContent().then(() => {
         ]),
         new MenuSection(img, "Reservation", [
             new MenuOption("Plane", reservationPlane)
-        ])
-
+        ]),
+        new MenuOption("Prestations", prestationsLayout, img)
     ], menuContainer);
-    
     menu.generate();
     }
 })

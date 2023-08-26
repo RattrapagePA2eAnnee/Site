@@ -1,6 +1,7 @@
 import { APIObject, APIAttribute } from "../../global/APIObject.js";
 
 export class ParkingReservation implements APIObject {
+    public id: APIAttribute;
     public reservation_id: APIAttribute;
     public parking_id: APIAttribute;
     public start_time: APIAttribute;
@@ -8,7 +9,11 @@ export class ParkingReservation implements APIObject {
     public price: APIAttribute;
     public status: APIAttribute;
 
-    constructor(reservation_id: string, parking_id: string, start_time: string, end_time: string, price: string, status: string) {
+    constructor(id: string, reservation_id: string, parking_id: string, start_time: string, end_time: string, price: string, status: string) {
+        this.id = {
+            value: id,
+            detail: false
+        };
         this.reservation_id = {
             value: reservation_id,
             detail: false
