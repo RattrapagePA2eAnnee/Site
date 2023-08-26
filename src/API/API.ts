@@ -9,6 +9,7 @@ import { ParkingReservation } from "./APIObjects/ParkingReservation.js";
 import { PlaneReservation } from "./APIObjects/PlaneReservation.js";
 import { ServiceReservation } from "./APIObjects/ServiceReservation.js";
 import { Plane } from "./APIObjects/Plane.js";
+import { Lesson } from "./APIObjects/Lesson.js";
 
 export class API {
         static address = "https://api.aen.best";
@@ -42,6 +43,39 @@ export class API {
         } catch(e) {
             console.log(e);
         }
+        }
+
+        static register(email: string, password: string, last_name: string, first_name: string, birth_date: string, address: string, postalCode: string, city: string) {
+            const route = "register";
+            const requestBody = JSON.stringify({
+                email,
+                password,
+                last_name,
+                first_name,
+                birth_date,
+                address,
+                postal_code: postalCode,
+                city
+            });
+    
+            try {
+                const registerRequest = new XMLHttpRequest();
+                registerRequest.open("POST", `${API.address}/${route}`);
+                registerRequest.onreadystatechange = () => {
+                    if (registerRequest.readyState === 4) {
+                        if (registerRequest.status === 200) {
+                            const userInfos = JSON.parse(registerRequest.responseText);
+                            if (userInfos.success === true) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                registerRequest.setRequestHeader("Content-type", "application/json");
+                registerRequest.send(requestBody);
+            } catch (e) {
+                console.log(e);
+            }
         }
 
 
@@ -400,6 +434,35 @@ export class API {
         }
         getPlanesRequest.setRequestHeader("Content-type", "application/json");
         getPlanesRequest.send();
+    });
+    }
+
+    static getLessons(): Promise<Array<Lesson>> {
+        return new Promise((resolve, reject) => {
+            const getLessonsRequest = new XMLHttpRequest();
+        getLessonsRequest.open("POST", `${API.address}/getlessons`);
+        getLessonsRequest.onreadystatechange = () => {
+            if(getLessonsRequest.readyState === 4){
+                if(getLessonsRequest.status === 200){
+                    const response = JSON.parse(getLessonsRequest.responseText);
+                    if(response.success == true){
+                        const lessons: Array<Lesson> = [];
+                        response.lessons.forEach((lesson: any) => {
+                            lessons.push(new Lesson(
+                                lesson.id,
+                                lesson.description,
+                                lesson.content
+                            ));
+                            resolve(lessons);
+                        });
+                    } else {
+                        reject(new Error(response.error));
+                    }
+                }
+            }
+        }
+        getLessonsRequest.setRequestHeader("Content-type", "application/json");
+        getLessonsRequest.send();
     });
     }
 
