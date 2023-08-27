@@ -1,0 +1,44 @@
+main{
+    font-family: Alumatica;
+}
+
+main h1, main h3 {
+    color: rgb(16, 88, 110);
+}
+
+main h1{
+    text-align: center;
+    margin: 30px;
+}
+
+main h3 {
+    margin-left: 20px;
+}
+
+main ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    padding-left: 20px;
+}
+
+main li {
+    margin-bottom: 10px;
+}
+
+main p {
+    font-size: 16px;
+    color: #666;
+}
+
+.services-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+main .services-aeroclub {
+    flex-basis: calc(50% - 10px);
+    padding: 20px;
+    background-color: rgba(16, 88, 110, 0.1);
+    box-sizing: border-box;
+}
+

@@ -1,9 +1,8 @@
 footer{
-    background-color: rgb(12, 40, 92);
+    background-color: rgb(16, 88, 110);
     color: white;
     font-family: Alumatica;
     width: 100%;
-    margin-top: 10vh;
 }
 footer img{
     filter: invert(96%) sepia(97%) saturate(12%) hue-rotate(237deg) brightness(103%) contrast(103%);
@@ -38,4 +37,8 @@ footer section:last-child{
 footer h3{
     text-transform: uppercase;
     border-bottom: 2px solid #23ebaf;
+}
+
+footer a{
+    margin-bottom: 10px;
 }
